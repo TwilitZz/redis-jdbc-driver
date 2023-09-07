@@ -28,7 +28,7 @@ public class RedisResultHelper {
     private RedisResultHelper() {
     }
 
-    private static final Map<CompositeCommand, List<ResultParserWrapper>> RESULT_PARSERS = new HashMap<>() {{
+    private static final Map<CompositeCommand, List<ResultParserWrapper>> RESULT_PARSERS = new HashMap<CompositeCommand, List<ResultParserWrapper>>() {{
         put(create(Command.ACL, Keyword.CAT), wrapList(STRING));
         put(create(Command.ACL, Keyword.DELUSER), wrapList(LONG));
         put(create(Command.ACL, Keyword.DRYRUN), wrapList(STRING));

@@ -4,7 +4,7 @@ plugins {
 
 version '1.4'
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -27,8 +27,9 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:19.0.0'
-    implementation group: 'redis.clients', name: 'jedis', version: '4.2.3'
+    implementation 'org.jetbrains:annotations:24.0.1'
+    implementation group: 'redis.clients', name: 'jedis', version: '4.3.2'
+    implementation group: 'org.json', name: 'json', version: '20230618'
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }
 
@@ -42,4 +43,4 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
-targetCompatibility = JavaVersion.VERSION_1_9
+targetCompatibility = 1.8

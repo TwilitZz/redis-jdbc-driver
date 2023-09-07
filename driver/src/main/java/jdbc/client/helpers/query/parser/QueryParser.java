@@ -31,18 +31,17 @@ public class QueryParser {
 
     private static final Map<String, ClusterKeyword> CLUSTER_KEYWORDS =
             Arrays.stream(ClusterKeyword.values()).collect(Collectors.toMap(Enum::name, v -> v));
-
-    private static final Set<Command> BLOCKING_COMMANDS = Set.of(
+    private static final Set<Command> BLOCKING_COMMANDS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             Command.BLMOVE, Command.BLMPOP, Command.BLPOP, Command.BRPOP,
             Command.BRPOPLPUSH, Command.BZMPOP, Command.BZPOPMAX, Command.BZPOPMIN
-    );
+    )));
 
-    private static final Set<Command> COMMANDS_WITH_KEYWORDS = Set.of(
+    private static final Set<Command> COMMANDS_WITH_KEYWORDS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
             Command.ACL, Command.CLIENT, Command.CLUSTER, Command.COMMAND,
             Command.CONFIG, Command.FUNCTION, Command.MEMORY, Command.MODULE,
             Command.OBJECT, Command.PUBSUB, Command.SCRIPT, Command.SLOWLOG,
             Command.XGROUP, Command.XINFO
-    );
+    )));
 
     private static @Nullable Command getCommand(@NotNull String command) {
         return COMMANDS.get(getName(command));

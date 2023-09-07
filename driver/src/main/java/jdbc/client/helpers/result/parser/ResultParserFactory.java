@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class ResultParserFactory {
 
-    public static final ResultParser OBJECT = new ListResultParser<>() {
+    public static final ResultParser OBJECT = new ListResultParser<Object, Object>() {
         @Override
         protected @NotNull ListEncoder<Object> getBuilder() {
             return EncoderFactory.OBJECT;
@@ -94,7 +94,7 @@ public class ResultParserFactory {
     };
 
 
-    public static final ResultParser OBJECT_MAP = new MapResultParser<>() {
+    public static final ResultParser OBJECT_MAP = new MapResultParser<Object, Object>() {
         @Override
         protected @NotNull MapEncoder<Object> getBuilder() {
             return EncoderFactory.OBJECT_MAP;

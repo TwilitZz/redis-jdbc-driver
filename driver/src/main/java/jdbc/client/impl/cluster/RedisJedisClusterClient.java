@@ -17,13 +17,12 @@ import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.JedisClusterHashTag;
 
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RedisJedisClusterClient extends RedisClientBase {
-
-    private static final Set<Command> UNSUPPORTED_COMMANDS = Set.of(Command.DBSIZE, Command.WAIT);
-
+    private static final Set<Command> UNSUPPORTED_COMMANDS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            Command.DBSIZE, Command.WAIT
+    )));
 
     private final JedisCluster jedisCluster;
 

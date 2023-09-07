@@ -20,7 +20,7 @@ public class RedisColumnTypeHelper {
     private RedisColumnTypeHelper() {
     }
     
-    private static final Map<String, Integer> javaTypeMap = new HashMap<>() {{
+    private static final Map<String, Integer> javaTypeMap = new HashMap<String, Integer>() {{
         put(OBJECT, Types.JAVA_OBJECT);
         put(STRING, Types.VARCHAR);
         put(LONG, Types.BIGINT);
@@ -31,7 +31,7 @@ public class RedisColumnTypeHelper {
         put(MAP, Types.JAVA_OBJECT);
     }};
     
-    private static final Map<String, String> typeNameMap = new HashMap<>() {{
+    private static final Map<String, String> typeNameMap = new HashMap<String, String>() {{
         put(OBJECT, "java.lang.Object");
         put(STRING, "java.lang.String");
         put(LONG, "java.lang.Long");

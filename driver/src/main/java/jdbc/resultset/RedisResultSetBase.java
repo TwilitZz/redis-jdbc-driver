@@ -51,7 +51,7 @@ public abstract class RedisResultSetBase<T, RR, R> implements ResultSet {
         List<ColumnMetaData> resultColumns = createResultColumns(result);
         ColumnHint columnHint = result.getQuery().getColumnHint();
         if (columnHint == null) return resultColumns;
-        return new ArrayList<>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
+        return new ArrayList<ColumnMetaData>() {{ add(createHintColumn(columnHint)); addAll(resultColumns); }};
     }
 
     protected ColumnMetaData createHintColumn(@NotNull ColumnHint columnHint) {
