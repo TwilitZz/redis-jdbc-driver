@@ -85,6 +85,7 @@ public abstract class RedisClientBase implements RedisClient {
         public SingleConnectionPoolConfig() {
             super();
             setMaxTotal(1);
+            setTestOnBorrow(true);
         }
     }
 }
