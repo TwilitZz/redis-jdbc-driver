@@ -84,7 +84,10 @@ public abstract class RedisClientBase implements RedisClient {
     protected static class SingleConnectionPoolConfig extends ConnectionPoolConfig {
         public SingleConnectionPoolConfig() {
             super();
-            setMaxTotal(1);
+            setMaxTotal(10);
+            setMaxIdle(5);
+            setMinIdle(1);
+            setMaxWaitMillis(3000);
             setTestOnBorrow(true);
         }
     }
