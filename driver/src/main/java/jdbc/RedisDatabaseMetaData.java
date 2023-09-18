@@ -1,13 +1,15 @@
 package jdbc;
 
 import jdbc.client.RedisMode;
+import jdbc.model.RedisResultSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
-import java.util.Arrays;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static jdbc.utils.Utils.toCapitalized;
 
@@ -75,7 +77,9 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
     @Nullable
     public RedisMode getDatabaseProductMode() throws SQLException {
         String modeName = getDatabaseProductInfo("redis_mode:(.+)");
-        if (modeName == null) return null;
+        if (modeName == null) {
+            return null;
+        }
         return Arrays.stream(RedisMode.values())
                 .filter(v -> modeName.equalsIgnoreCase(v.name())).findFirst().orElse(null);
     }
@@ -646,17 +650,62 @@ public class RedisDatabaseMetaData implements DatabaseMetaData {
 
     @Override
     public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
-        return null;
+        if(catalog == null || "".equals(catalog)){
+            catalog = schemaPattern;
+        }
+        String oldSchema;
+        Set<String> keysSet = new HashSet<>();
+        try {
+            oldSchema = connection.getSchema();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        connection.setSchema(catalog);
+        Statement statement = connection.createStatement();
+        ResultSet keysRs = statement.executeQuery("scan 0 match * count 150");
+        Array keysArr = null;
+        while(keysRs.next()){
+            keysArr = keysRs.getArray(2);
+        }
+        Object[] arrayObj;
+        if(keysArr != null){
+            arrayObj = (Object[]) keysArr.getArray();
+            for (Object o : arrayObj) {
+                keysSet.add((String) o);
+                //只取前100个，scan取150个是因为可能包含重复数据
+                if (keysSet.size() == 100) {
+                    break;
+                }
+            }
+        }
+
+        keysRs.close();
+        connection.setSchema(oldSchema);
+        String[] stringArray = keysSet.toArray(new String[0]);
+        return new RedisResultSet(stringArray,statement);
     }
 
     @Override
     public ResultSet getSchemas() throws SQLException {
-        return null;
+        ResultSet rs;
+        Statement statement = connection.createStatement();
+        String[] databases;
+        ResultSet configGetDatabases = statement.executeQuery("config get databases");
+        int databaseCount = 0;
+        if(configGetDatabases.next()){
+            databaseCount = Integer.parseInt(configGetDatabases.getString(2));
+        }
+        databases = IntStream.range(0,databaseCount)
+                .mapToObj(i -> i + "")
+                .toArray(String[]::new);
+        rs = new RedisResultSet(databases,statement);
+        return rs;
     }
 
     @Override
     public ResultSet getCatalogs() throws SQLException {
-        return null;
+        return getSchemas();
     }
 
     @Override

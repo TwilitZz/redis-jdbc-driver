@@ -77,7 +77,7 @@ public class RedisResultSetMetaData implements ResultSetMetaData {
 
     @Override
     public int getColumnDisplaySize(int column) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+        return Integer.MAX_VALUE;
     }
 
     @Override

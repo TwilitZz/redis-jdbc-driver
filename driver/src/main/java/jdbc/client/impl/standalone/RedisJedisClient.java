@@ -18,6 +18,7 @@ public class RedisJedisClient extends RedisClientBase {
     public RedisJedisClient(@NotNull RedisJedisURI uri) throws SQLException {
         try {
             jedis = new Jedis(uri.getHostAndPort(), uri);
+            jedis.select(uri.getDatabase());
             jedis.connect();
         } catch (JedisException e) {
             throw sqlWrap(e);

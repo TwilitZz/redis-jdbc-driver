@@ -88,7 +88,7 @@ public class RedisStatement implements Statement {
 
     @Override
     public void setQueryTimeout(int seconds) throws SQLException {
-        throw new SQLFeatureNotSupportedException();
+
     }
 
     @Override
